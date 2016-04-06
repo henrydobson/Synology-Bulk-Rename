@@ -1,0 +1,16 @@
+#!/usr/syno/synoha/bin/bash
+
+### Usage: Place renamedir into /bin
+### Using the FULL PATH execute the following command to recursively rename all directories.
+### find FULLPATH -type d -exec renamedir '{}' \;
+### Real World example: find /volume1/Folder/1000-1099/1065\ Henry\ Dobson/ -type d -exec renamedir '{}' \;
+
+
+echo "Original Folder Name: "$1""
+NEWNAME=`echo "$1" | sed 's/[\\:*?\"<>|.]/_/g'`
+printf "New Folder Name: $NEWNAME\n"
+if [[ "$1" != "$NEWNAME" ]]; then
+	printf "Moving $1 to $NEWNAME"
+	mv "$1" "$NEWNAME"
+fi
+printf "\n\n"
