@@ -52,7 +52,6 @@ RENAMEFUNC ()
 	# FNAME=`echo "$ORIG" | rev | cut -d'/' -f1 | rev` ### rev not available on Synology.
 	FNAME=`basename "$ORIG"`
 
-	printf "\n####\n`date`"
 # Set NEWNAME based on if the source is file or directory.
 	if [[ -f "$ORIG" ]]; then
 		NEWNAME=`echo "$FNAME" | sed 's/[\\:*?\"<>|]/_/g'`
@@ -63,17 +62,19 @@ RENAMEFUNC ()
 	fi
 
 # Only rename if the source is different to the NEWNAME.
-	if [[ "$FNAME" == "$NEWNAME" ]] || [[ "$FNAME" == ".TemporaryItems" ]] || [[ "$FNAME" == folders.* ]]; then
+	if [[ "$FNAME" == "$NEWNAME" ]] || [[ "$FNAME" == ".TemporaryItems" ]] || [[ "$FNAME" == folders.* ]] || [[ "$FNAME" == *eaDir* ]] || [[ "$FNAME" == *@SynoResource* ]]; then
 		:
 	elif [[ "$FNAME" != "$NEWNAME" ]]; then
 		if [[ $NOOP == 'True' ]]; then
-			printf "\n√√√ Would move...\n\nOrig: $ORIG \nto...\nNew: $NEWPATH"
+			printf "\n####\n`date`"
+			printf "\n√√√ Would move...\n\nOrig: $ORIG \nto...\nNew: $NEWPATH\n"
 		elif [[ $NOOP == 'False' ]]; then
+			printf "\n####\n`date`"
 			printf "\n√√√ Moving...\n\nOrig: $ORIG \nto...\nNew: $NEWPATH\n"
 			mv "$ORIG" "$NEWPATH"
 		fi
 	fi
-	printf "\n\n"
+
 }
 
 time for f in "${SOURCES[@]}"; do
