@@ -11,6 +11,7 @@
 # Default Paramaters.
 export NOOP=False
 declare -a SOURCES=()
+LOG=/volume1/log/hdRename.log
 
 # Parse options for command.
 for i in "$@"; do
@@ -29,8 +30,8 @@ for i in "$@"; do
 	esac
 done
 
-/bin/touch /var/log/hdRename.log
-LOG=/var/log/hdRename.log
+mkdir -p /volume1/log
+/bin/touch $LOG
 
 # Saves file descriptors so they can be restored to whatever they were
 # before redirection or used themselves to output to whatever they were before the following redirect.
@@ -59,14 +60,11 @@ RENAMEFUNC ()
 	elif [[ -d "$ORIG" ]]; then
 		NEWNAME=`echo "$FNAME" | sed 's/[\\:*?\"<>|.]/_/g'`
 		NEWPATH="${ORIG/$FNAME/$NEWNAME}"
-	else
-		printf "\n:( !!! Not a file or folder."
 	fi
 
 # Only rename if the source is different to the NEWNAME.
 	if [[ "$FNAME" == "$NEWNAME" ]] || [[ "$FNAME" == ".TemporaryItems" ]] || [[ "$FNAME" == folders.* ]]; then
-		printf "\nName OK."
-		printf "\nSource: $ORIG"
+		:
 	elif [[ "$FNAME" != "$NEWNAME" ]]; then
 		if [[ $NOOP == 'True' ]]; then
 			printf "\n√√√ Would move...\n\nOrig: $ORIG \nto...\nNew: $NEWPATH"
